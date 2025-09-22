@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+# My files
+issues.txt
+ReadMe.txt
+combined_file.txt
+combine.bat
+build_comands.txt

@@ -1,0 +1,37 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "windows-default",
+      "hidden": false,
+      "description": "Windows Visual Studio with Conan",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/build/generators/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "unix-debug",
+      "hidden": false,
+      "description": "Linux/macOS Debug build with Conan",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/build/Debug/generators/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "unix-release",
+      "hidden": false,
+      "description": "Linux/macOS Release build with Conan",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/build/Release/generators/conan_toolchain.cmake"
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Top-most EditorConfig file
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8```
+# Cохранение всех текстовых файлов в проекте в кодировке UTF-8
