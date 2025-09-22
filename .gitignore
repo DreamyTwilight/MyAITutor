@@ -40,7 +40,8 @@
 # debug information files
 *.dwo
 
-# My files
+# My files and folders
+build/
 issues.txt
 ReadMe.txt
 combined_file.txt
