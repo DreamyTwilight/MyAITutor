@@ -19,25 +19,32 @@ endif()
 
 enable_testing()
 
-set(APP_SOURCES
-    src/main.cpp
-    src/app/Application.h
+# Определяем .cpp файлы, которые являются "библиотекой" приложения
+set(AITUTOR_LIB_SOURCES
     src/app/Application.cpp
-    src/app/CreateCurriculumUseCase.h
     src/app/CreateCurriculumUseCase.cpp
-    src/app/VirtualUserInterface.h
     src/app/VirtualUserInterface.cpp
-    src/infrastructure/GeminiService.h
     src/infrastructure/GeminiService.cpp
-    src/infrastructure/SQLiteManager.h
     src/infrastructure/SQLiteManager.cpp
+    src/core/PromptRegistry.cpp
+)
+
+# Определяем .h файлы, чтобы Visual Studio их видела
+set(AITUTOR_HEADERS
+    src/app/Application.h
+    src/app/CreateCurriculumUseCase.h
+    src/app/VirtualUserInterface.h
+    src/infrastructure/GeminiService.h
+    src/infrastructure/SQLiteManager.h
     src/interfaces/IDatabaseManager.h
     src/interfaces/ILLMService.h
     src/interfaces/IUserInterface.h
     src/core/DataModels.h
     src/core/PromptRegistry.h
-    src/core/PromptRegistry.cpp
 )
+
+# Определяем точку входа
+set(APP_ENTRY_SOURCE src/main.cpp)
 
 set(COMMON_LIBRARIES 
     nlohmann_json::nlohmann_json
@@ -56,14 +63,16 @@ find_package(fmt REQUIRED)
 
 # --- Основное приложение ---
 
-add_executable(my_ai_tutor ${APP_SOURCES})
+add_executable(my_ai_tutor ${APP_ENTRY_SOURCE} ${AITUTOR_LIB_SOURCES})
+target_sources(my_ai_tutor PRIVATE ${AITUTOR_HEADERS})
 target_link_libraries(my_ai_tutor PRIVATE ${COMMON_LIBRARIES})
 target_compile_definitions(my_ai_tutor PUBLIC SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)
 
 # --- Тесты --- 
 
-add_executable(g_tests tests/test_main.cpp)
+add_executable(g_tests tests/test_main.cpp ${AITUTOR_LIB_SOURCES})
 target_link_libraries(g_tests PRIVATE GTest::gtest_main ${COMMON_LIBRARIES})
+target_sources(g_tests PRIVATE ${AITUTOR_HEADERS})
 add_test(NAME all_tests COMMAND g_tests)
 target_compile_definitions(g_tests PUBLIC SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)
 
