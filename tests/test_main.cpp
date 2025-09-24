@@ -5,6 +5,12 @@
 #include <cpr/cpr.h>
 #include <curl/curl.h>
 
+#include "../src/interfaces/IDatabaseManager.h"
+#include "../src/infrastructure/SQLiteManager.h"
+#include "../src/core/DataModels.h"             
+
+#include "../src/infrastructure/GeminiService.h"
+#include "../src/infrastructure/GeminiParser.h"
 
 TEST(SampleTest, BasicAssertions) {
     EXPECT_EQ(1 + 1, 2);
@@ -48,9 +54,6 @@ TEST(DependencyLinkage, CprHttpsRequest) {
 }
 
 // -------- ТЕСТЫ ДЛЯ SQLITEMANAGER ----------
-#include "../src/interfaces/IDatabaseManager.h"
-#include "../src/infrastructure/SQLiteManager.h"
-#include "../src/core/DataModels.h"             
 
 // Test Fixture для SQLiteManager
 class SQLiteManagerTest : public ::testing::Test {
@@ -62,11 +65,6 @@ protected:
     void SetUp() override {
         manager_ = std::make_unique<SQLiteManager>(test_db_filename_);
     }
-
-    void TearDown() override {
-        manager_.reset(); // Объект удаляется, соединение с БД закрывается, память освобождается
-    }
-
 };
 
 // Тест 1: Проверяем, что конструктор не падает.
@@ -112,4 +110,80 @@ TEST_F(SQLiteManagerTest, HasCurriculumReturnsFalseForNonexistent) {
     // Arrange: База данных пуста
     // Act & Assert:
     ASSERT_FALSE(manager_->HasCurriculum("C++", "C++17"));
+}
+
+// -------- ТЕСТЫ ДЛЯ GEMINIPARSER ----------
+
+// Тестовый набор для парсера ответов от Gemini
+class GeminiParserTest : public ::testing::Test {
+protected:
+    // Пример "сырого" ответа от API Gemini
+    const std::string raw_api_response_ = R"({
+        "candidates": [
+            {
+                "content": {
+                    "parts": [
+                        {
+                            "text": "```json\n[{\"module_name\":\"Основы C++\",\"topics\":[{\"topic_name\":\"Переменные и типы данных\",\"difficulty\":\"базовый\"},{\"topic_name\":\"Операторы\",\"difficulty\":\"базовый\"}]}]```"
+                        }
+                    ],
+                    "role": "model"
+                }
+            }
+        ]
+    })";
+
+    // Пример "чистого" JSON учебного плана
+    const std::string clean_curriculum_json_ = R"([
+        {
+            "module_name": "Core Language",
+            "topics": [
+                { "topic_name": "RAII", "difficulty": "базовый" },
+                { "topic_name": "Move Semantics", "difficulty": "продвинутый" }
+            ]
+        },
+        {
+            "module_name": "STL",
+            "topics": [
+                { "topic_name": "Containers", "difficulty": "средний" }
+            ]
+        }
+    ])";
+};
+
+// Тестируем извлечение контента из полного ответа API
+TEST_F(GeminiParserTest, ExtractJsonContentFromValidResponse) {
+    std::string extracted = GeminiParser::ExtractJsonContent(raw_api_response_);
+    // Проверяем, что маркеры ```json были удалены
+    ASSERT_EQ(extracted, R"([{"module_name":"Основы C++","topics":[{"topic_name":"Переменные и типы данных","difficulty":"базовый"},{"topic_name":"Операторы","difficulty":"базовый"}]}])");
+}
+
+// Тестируем трансформацию чистого JSON в наши структуры данных
+TEST_F(GeminiParserTest, TransformJsonToCurriculumFromValidJson) {
+    Curriculum curriculum = GeminiParser::TransformJsonToCurriculum(clean_curriculum_json_, "C++", "C++17");
+
+    // Проверяем общие данные
+    ASSERT_EQ(curriculum.language, "C++");
+    ASSERT_EQ(curriculum.standard, "C++17");
+
+    // Проверяем структуру
+    ASSERT_EQ(curriculum.modules.size(), 2);
+    ASSERT_EQ(curriculum.modules[0].name, "Core Language");
+    ASSERT_EQ(curriculum.modules[0].topics.size(), 2);
+    ASSERT_EQ(curriculum.modules[1].name, "STL");
+    ASSERT_EQ(curriculum.modules[1].topics.size(), 1);
+
+    // Проверяем конкретные данные
+    ASSERT_EQ(curriculum.modules[0].topics[1].name, "Move Semantics");
+    ASSERT_EQ(curriculum.modules[0].topics[1].difficulty, "продвинутый");
+}
+
+// Тестируем обработку ошибок
+TEST_F(GeminiParserTest, TransformJsonThrowsOnEmptyInput) {
+    ASSERT_THROW(GeminiParser::TransformJsonToCurriculum("", "C++", "C++17"), std::runtime_error);
+}
+
+TEST_F(GeminiParserTest, TransformJsonThrowsOnMalformedJson) {
+    const std::string malformed_json = R"([{"module_name": "Incomplete"})";
+    ASSERT_THROW(GeminiParser::TransformJsonToCurriculum(malformed_json, "C++", "C++17"), nlohmann::json::parse_error);
 }

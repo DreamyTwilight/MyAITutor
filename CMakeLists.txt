@@ -26,6 +26,7 @@ set(AITUTOR_LIB_SOURCES
     src/app/VirtualUserInterface.cpp
     src/infrastructure/GeminiService.cpp
     src/infrastructure/SQLiteManager.cpp
+    src/infrastructure/GeminiParser.cpp
     src/core/PromptRegistry.cpp
 )
 
@@ -36,6 +37,7 @@ set(AITUTOR_HEADERS
     src/app/VirtualUserInterface.h
     src/infrastructure/GeminiService.h
     src/infrastructure/SQLiteManager.h
+    src/infrastructure/GeminiParser.h
     src/interfaces/IDatabaseManager.h
     src/interfaces/ILLMService.h
     src/interfaces/IUserInterface.h

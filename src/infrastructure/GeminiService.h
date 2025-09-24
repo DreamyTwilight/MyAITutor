@@ -11,10 +11,5 @@ public:
 private:
     std::string api_key_;
 
-
     std::string PerformRequest(const std::string& prompt);
-    static std::string ExtractJsonContent(const std::string& apiResponseText);
-    Curriculum TransformJsonToCurriculum(const std::string& json_string,
-        const std::string& language,
-        const std::string& standard);
 };
