@@ -6,11 +6,17 @@
 #include <vector>
 #include <memory>
 
-class IDatabaseManager {
-public:
-    virtual ~IDatabaseManager() = default;
-    // Метод теперь принимает Curriculum
-    virtual void SaveCurriculum(const Curriculum& curriculum) = 0;
-    // Новый метод для проверки
-    virtual bool HasCurriculum(const std::string& language, const std::string& standard) = 0;
-};
+namespace tutor::interfaces {
+
+    using Curriculum = tutor::core::Curriculum;
+
+    class IDatabaseManager {
+    public:
+        virtual ~IDatabaseManager() = default;
+        // Метод теперь принимает Curriculum
+        virtual void SaveCurriculum(const Curriculum& curriculum) = 0;
+        // Новый метод для проверки
+        virtual bool HasCurriculum(const std::string& language, const std::string& standard) = 0;
+    };
+} // tutor::interfaces
+

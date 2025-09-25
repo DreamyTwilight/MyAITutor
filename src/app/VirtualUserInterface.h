@@ -4,11 +4,17 @@
 #pragma once
 #include "../interfaces/IUserInterface.h"
 
-// Заглушка, которая эмулирует ввод пользователя
-class VirtualUserInterface : public IUserInterface {
-public:
-    Command getNextCommand() override;
+namespace tutor::app {
+    
+    using tutor::interfaces::IUserInterface;
+    using tutor::interfaces::Command;
 
-private:
-    bool first_call_ = true;
-};
+    // Заглушка, которая эмулирует ввод пользователя
+    class VirtualUserInterface : public IUserInterface {
+    public:
+        Command getNextCommand() override;
+
+    private:
+        bool first_call_ = true;
+    };
+} // tutor::app

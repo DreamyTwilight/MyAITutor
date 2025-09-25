@@ -8,7 +8,7 @@
 
 using json = nlohmann::json;
 
-namespace GeminiParser {
+namespace tutor::infrastructure {
 
     Curriculum TransformJsonToCurriculum(const std::string& json_string,
         const std::string& language,

@@ -4,7 +4,9 @@
 #include "../core/DataModels.h"
 #include <string>
 
-namespace GeminiParser {
+namespace tutor::infrastructure {
+
+    using tutor::core::Curriculum;
 
     std::string ExtractJsonContent(const std::string& apiResponseText);
 

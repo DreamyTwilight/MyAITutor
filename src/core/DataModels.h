@@ -5,22 +5,26 @@
 #include <string>
 #include <vector>
 
-struct Topic {
-    Topic(std::string name, std::string difficulty) : name(std::move(name)), difficulty(std::move(difficulty)){}
-    std::string name;
-    std::string difficulty;
-    bool is_archived = false;
-};
+namespace tutor::core {
+    
+    struct Topic {
+        Topic(std::string name, std::string difficulty) : name(std::move(name)), difficulty(std::move(difficulty)) {}
+        std::string name;
+        std::string difficulty;
+        bool is_archived = false;
+    };
 
-struct Module {
-    explicit Module(std::string name) : name(std::move(name)) {}
+    struct Module {
+        explicit Module(std::string name) : name(std::move(name)) {}
 
-    std::string name;
-    std::vector<Topic> topics;
-};
+        std::string name;
+        std::vector<Topic> topics;
+    };
 
-struct Curriculum {
-    std::string language;
-    std::string standard;
-    std::vector<Module> modules;
-};
+    struct Curriculum {
+        std::string language;
+        std::string standard;
+        std::vector<Module> modules;
+    };
+} // tutor::core
+

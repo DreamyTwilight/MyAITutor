@@ -10,51 +10,56 @@
 
 using json = nlohmann::json;
 
-// ----- public -----
-GeminiService::GeminiService(const std::string& api_key): api_key_(api_key){}
+namespace tutor::infrastructure {
 
-Curriculum  GeminiService::GenerateCurriculum(const std::string& lang, const std::string& standard) {
+    using namespace tutor::core;
 
-    const std::string prompt = PromptRegistry::GenerateCurriculumPrompt(lang, standard);
+    // ----- public -----
+    GeminiService::GeminiService(const std::string& api_key) : api_key_(api_key) {}
 
-    std::string curriculum_json_string = PerformRequest(std::string(prompt));
+    Curriculum  GeminiService::GenerateCurriculum(const std::string& lang, const std::string& standard) {
 
-    return GeminiParser::TransformJsonToCurriculum(curriculum_json_string, lang, standard);
-}
+        const std::string prompt = PromptRegistry::GenerateCurriculumPrompt(lang, standard);
 
-//  ----- private -----
+        std::string curriculum_json_string = PerformRequest(std::string(prompt));
 
-std::string GeminiService::PerformRequest(const std::string& prompt) {
-    
-    const std::string geminiApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + api_key_;
+        return tutor::infrastructure::TransformJsonToCurriculum(curriculum_json_string, lang, standard);
+    }
 
-    json requestBody = {
-    {"contents", {{
-        {"parts", {{
-            {"text", prompt}
+    //  ----- private -----
+
+    std::string GeminiService::PerformRequest(const std::string& prompt) {
+
+        const std::string geminiApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + api_key_;
+
+        json requestBody = {
+        {"contents", {{
+            {"parts", {{
+                {"text", prompt}
+            }}}
         }}}
-    }}}
-    };
+        };
 
-    cpr::Response r;
+        cpr::Response r;
 
 #ifdef CACERT_PATH
-    // Для Windows используем наш локальный сертификат
-    r = cpr::Post(cpr::Url{ geminiApiUrl },
-        cpr::Body{ requestBody.dump() },
-        cpr::Header{ {"Content-Type", "application/json"} },
-        cpr::Ssl(cpr::ssl::CaInfo{ CACERT_PATH }));
+        // Для Windows используем наш локальный сертификат
+        r = cpr::Post(cpr::Url{ geminiApiUrl },
+            cpr::Body{ requestBody.dump() },
+            cpr::Header{ {"Content-Type", "application/json"} },
+            cpr::Ssl(cpr::ssl::CaInfo{ CACERT_PATH }));
 #else
-    // Для Linux/macOS используем системные сертификаты
-    r = cpr::Post(cpr::Url{ geminiApiUrl },
-        cpr::Body{ requestBody.dump() },
-        cpr::Header{ {"Content-Type", "application/json"} });
+        // Для Linux/macOS используем системные сертификаты
+        r = cpr::Post(cpr::Url{ geminiApiUrl },
+            cpr::Body{ requestBody.dump() },
+            cpr::Header{ {"Content-Type", "application/json"} });
 #endif
 
-    if (r.status_code != 200) {
-        throw std::runtime_error("API Error: " + std::to_string(r.status_code) + " - " + r.text);
+        if (r.status_code != 200) {
+            throw std::runtime_error("API Error: " + std::to_string(r.status_code) + " - " + r.text);
+        }
+        //std::cout << "   -> API response received successfully." << std::endl;
+
+        return tutor::infrastructure::ExtractJsonContent(r.text);
     }
-    //std::cout << "   -> API response received successfully." << std::endl;
-    
-    return GeminiParser::ExtractJsonContent(r.text);
-}
+} // tutor::infrastructure

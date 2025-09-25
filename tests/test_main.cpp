@@ -12,6 +12,11 @@
 #include "../src/infrastructure/GeminiService.h"
 #include "../src/infrastructure/GeminiParser.h"
 
+using namespace tutor::core;
+using namespace tutor::infrastructure;
+using namespace tutor::interfaces;
+
+
 TEST(SampleTest, BasicAssertions) {
     EXPECT_EQ(1 + 1, 2);
     EXPECT_TRUE(true);
@@ -153,14 +158,14 @@ protected:
 
 // Тестируем извлечение контента из полного ответа API
 TEST_F(GeminiParserTest, ExtractJsonContentFromValidResponse) {
-    std::string extracted = GeminiParser::ExtractJsonContent(raw_api_response_);
+    std::string extracted = ExtractJsonContent(raw_api_response_);
     // Проверяем, что маркеры ```json были удалены
     ASSERT_EQ(extracted, R"([{"module_name":"Основы C++","topics":[{"topic_name":"Переменные и типы данных","difficulty":"базовый"},{"topic_name":"Операторы","difficulty":"базовый"}]}])");
 }
 
 // Тестируем трансформацию чистого JSON в наши структуры данных
 TEST_F(GeminiParserTest, TransformJsonToCurriculumFromValidJson) {
-    Curriculum curriculum = GeminiParser::TransformJsonToCurriculum(clean_curriculum_json_, "C++", "C++17");
+    Curriculum curriculum = TransformJsonToCurriculum(clean_curriculum_json_, "C++", "C++17");
 
     // Проверяем общие данные
     ASSERT_EQ(curriculum.language, "C++");
@@ -180,10 +185,10 @@ TEST_F(GeminiParserTest, TransformJsonToCurriculumFromValidJson) {
 
 // Тестируем обработку ошибок
 TEST_F(GeminiParserTest, TransformJsonThrowsOnEmptyInput) {
-    ASSERT_THROW(GeminiParser::TransformJsonToCurriculum("", "C++", "C++17"), std::runtime_error);
+    ASSERT_THROW(TransformJsonToCurriculum("", "C++", "C++17"), std::runtime_error);
 }
 
 TEST_F(GeminiParserTest, TransformJsonThrowsOnMalformedJson) {
     const std::string malformed_json = R"([{"module_name": "Incomplete"})";
-    ASSERT_THROW(GeminiParser::TransformJsonToCurriculum(malformed_json, "C++", "C++17"), nlohmann::json::parse_error);
+    ASSERT_THROW(TransformJsonToCurriculum(malformed_json, "C++", "C++17"), nlohmann::json::parse_error);
 }

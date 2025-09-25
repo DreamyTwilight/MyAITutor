@@ -6,22 +6,25 @@
 #include <map>
 #include <variant>
 
-// Определяем типы команд, которые может вернуть UI
-enum class CommandType {
-    CreateCurriculum,
-    Exit,
-    Unknown
-};
+namespace tutor::interfaces {
 
-// Структура для представления команды и ее параметров
-struct Command {
-    CommandType type = CommandType::Unknown;
-    std::map<std::string, std::string> params;
-};
+    // Определяем типы команд, которые может вернуть UI
+    enum class CommandType {
+        CreateCurriculum,
+        Exit,
+        Unknown
+    };
 
-// Абстрактный интерфейс для любого UI
-class IUserInterface {
-public:
-    virtual ~IUserInterface() = default;
-    virtual Command getNextCommand() = 0;
-};
+    // Структура для представления команды и ее параметров
+    struct Command {
+        CommandType type = CommandType::Unknown;
+        std::map<std::string, std::string> params;
+    };
+
+    // Абстрактный интерфейс для любого UI
+    class IUserInterface {
+    public:
+        virtual ~IUserInterface() = default;
+        virtual Command getNextCommand() = 0;
+    };
+} // tutor::interfaces

@@ -8,6 +8,9 @@
 #include "app/Application.h"
 #include "app/VirtualUserInterface.h"
 
+using tutor::app::VirtualUserInterface;
+using tutor::app::Application;
+
 int main() {
 
         // --- БЛОК НАСТРОЙКИ ФОРМАТА ЛОГИРОВАНИЯ ---

@@ -3,13 +3,19 @@
 #pragma once
 #include "../interfaces/ILLMService.h"
 
-class GeminiService : public ILLMService {
-public:
-    explicit GeminiService(const std::string& api_key);
-    Curriculum GenerateCurriculum(const std::string& lang, const std::string& standard) override;
+namespace tutor::infrastructure {
 
-private:
-    std::string api_key_;
+    using Curriculum = tutor::core::Curriculum;
+    using ILLMService = tutor::interfaces::ILLMService;
 
-    std::string PerformRequest(const std::string& prompt);
-};
+    class GeminiService : public ILLMService {
+    public:
+        explicit GeminiService(const std::string& api_key);
+        Curriculum GenerateCurriculum(const std::string& lang, const std::string& standard) override;
+
+    private:
+        std::string api_key_;
+
+        std::string PerformRequest(const std::string& prompt);
+    };
+} // tutor::infrastructure
