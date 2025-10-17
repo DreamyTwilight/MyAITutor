@@ -1,4 +1,4 @@
-
+﻿
 // src/infrastructure/GeminiParser.h
 
 #include "../core/DataModels.h"
@@ -14,3 +14,4 @@ namespace tutor::infrastructure {
                                          const std::string& language,
                                          const std::string& standard);
 }
+

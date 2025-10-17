@@ -34,7 +34,7 @@ namespace tutor::infrastructure {
 
         SQLite::Transaction transaction(*db_uptr_);
 
-        // Подготовленные запросы для модулей и тем
+        // запросы для модулей и тем
         SQLite::Statement moduleQuery(*db_uptr_, "INSERT INTO Modules (name, standard_id) VALUES (?, ?)");
         SQLite::Statement topicQuery(*db_uptr_, "INSERT INTO Topics (name, difficulty, module_id) VALUES (?, ?, ?)");
 
@@ -47,7 +47,7 @@ namespace tutor::infrastructure {
             );
 
             for (const auto& topic : module.topics) {
-                // 4. Вставляем тему с ID модуля (используем INSERT OR IGNORE для идемпотентности)
+                // 4. Вставляем тему с ID модуля
                 topicQuery.bind(1, topic.name);
                 topicQuery.bind(2, topic.difficulty);
                 topicQuery.bind(3, moduleId);
@@ -61,7 +61,7 @@ namespace tutor::infrastructure {
     }
 
     bool SQLiteManager::HasCurriculum(const std::string& language, const std::string& standard) {
-        // Этот запрос проверит, есть ли хоть одна тема для данного языка/стандарта
+        // проверка наличия тем для данного языка/стандарта
         SQLite::Statement query(*db_uptr_,
             "SELECT 1 FROM Topics "
             "JOIN Modules ON Topics.module_id = Modules.id "
@@ -137,6 +137,7 @@ namespace tutor::infrastructure {
         }
     }
 } // tutor::infrastructure
+
 
 
 

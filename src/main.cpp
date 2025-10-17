@@ -45,5 +45,7 @@ int main() {
     }
 
     SPDLOG_INFO("Application finished successfully.");
+    spdlog::shutdown();
     return 0;
 }
+

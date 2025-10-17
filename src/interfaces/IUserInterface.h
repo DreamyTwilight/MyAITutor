@@ -1,4 +1,4 @@
-
+﻿
 // src/interfaces/IUserInterface.h
 
 #pragma once
@@ -8,23 +8,24 @@
 
 namespace tutor::interfaces {
 
-    // Определяем типы команд, которые может вернуть UI
+    // РћРїСЂРµРґРµР»СЏРµРј С‚РёРїС‹ РєРѕРјР°РЅРґ, РєРѕС‚РѕСЂС‹Рµ РјРѕР¶РµС‚ РІРµСЂРЅСѓС‚СЊ UI
     enum class CommandType {
         CreateCurriculum,
         Exit,
         Unknown
     };
 
-    // Структура для представления команды и ее параметров
+    // РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РєРѕРјР°РЅРґС‹ Рё РµРµ РїР°СЂР°РјРµС‚СЂРѕРІ
     struct Command {
         CommandType type = CommandType::Unknown;
         std::map<std::string, std::string> params;
     };
 
-    // Абстрактный интерфейс для любого UI
+    // РђР±СЃС‚СЂР°РєС‚РЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ РґР»СЏ Р»СЋР±РѕРіРѕ UI
     class IUserInterface {
     public:
         virtual ~IUserInterface() = default;
-        virtual Command getNextCommand() = 0;
+        virtual Command GetNextCommand() = 0;
     };
 } // tutor::interfaces
+

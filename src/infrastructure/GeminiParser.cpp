@@ -1,4 +1,4 @@
-
+п»ї
 // src/infrastructure/GeminiParser.cpp
 
 #include "GeminiParser.h"
@@ -47,7 +47,7 @@ namespace tutor::infrastructure {
             }
 
             std::string generatedText = textNode.get<std::string>();
-            // Убираем маркеры ```json, которые добавляет модель
+            // РЈР±РёСЂР°РµРј РјР°СЂРєРµСЂС‹ ```json, РєРѕС‚РѕСЂС‹Рµ РґРѕР±Р°РІР»СЏРµС‚ РјРѕРґРµР»СЊ
             size_t start = generatedText.find_first_of("[{");
             size_t end = generatedText.find_last_of("}]");
 
@@ -56,7 +56,7 @@ namespace tutor::infrastructure {
             }
             return generatedText;
         }
-        catch (const json::exception& e) { // Ловим ошибки парсинга/доступа
+        catch (const json::exception& e) { // Р›РѕРІРёРј РѕС€РёР±РєРё РїР°СЂСЃРёРЅРіР°/РґРѕСЃС‚СѓРїР°
             SPDLOG_CRITICAL("JSON access error in API response : ", e.what());
             SPDLOG_CRITICAL("Original response text:\n---\n", apiResponseText ,"\n---");
             std::cerr << "JSON access error in API response: " << e.what() << std::endl;
@@ -65,3 +65,4 @@ namespace tutor::infrastructure {
         }
     }
 }
+

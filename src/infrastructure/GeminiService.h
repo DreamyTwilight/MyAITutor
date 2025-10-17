@@ -12,10 +12,11 @@ namespace tutor::infrastructure {
     public:
         explicit GeminiService(const std::string& api_key);
         Curriculum GenerateCurriculum(const std::string& lang, const std::string& standard) override;
+        std::string PerformRequest(const std::string& prompt) override;
 
     private:
         std::string api_key_;
 
-        std::string PerformRequest(const std::string& prompt);
     };
 } // tutor::infrastructure
+

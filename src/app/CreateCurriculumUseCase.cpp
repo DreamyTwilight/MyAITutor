@@ -8,11 +8,11 @@ namespace tutor::app {
 
     using namespace tutor::interfaces;
     using namespace tutor::core;
+    using namespace tutor::process;
 
-    CreateCurriculumUseCase::CreateCurriculumUseCase(ILLMService& llmService, IDatabaseManager& dbManager)
-        : llmService_(llmService), dbManager_(dbManager)
-    {
-    }
+    CreateCurriculumUseCase::CreateCurriculumUseCase(IGenerativeProcess& process, IDatabaseManager& dbManager)
+        : process_(process), dbManager_(dbManager)
+    {}
 
     void CreateCurriculumUseCase::Execute(const std::string& lang, const std::string& standard) {
         SPDLOG_INFO("Executing 'Create Curriculum' use case for {} {}", lang, standard);
@@ -21,8 +21,9 @@ namespace tutor::app {
             return;
         }
 
-        Curriculum curriculum = llmService_.GenerateCurriculum(lang, standard);
+        Curriculum curriculum = process_.Execute(lang, standard);
         dbManager_.SaveCurriculum(curriculum);
         SPDLOG_INFO("'Create Curriculum' use case completed successfully.");
     }
 } // tutor::app
+

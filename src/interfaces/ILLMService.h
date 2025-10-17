@@ -14,6 +14,8 @@ namespace tutor::interfaces {
     public:
         virtual ~ILLMService() = default;
         virtual Curriculum GenerateCurriculum(const std::string& language, const std::string& standard) = 0;
+        virtual std::string PerformRequest(const std::string& prompt) = 0;
     };
 } // tutor::interfaces
+
 

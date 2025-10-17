@@ -1,4 +1,4 @@
-
+п»ї
 // src/core/PromptRegistry.h
 
 #pragma once
@@ -8,10 +8,11 @@ namespace tutor::core {
 
     class PromptRegistry {
     public:
-        // Статический метод для генерации промпта учебного плана
+        // РЎС‚Р°С‚РёС‡РµСЃРєРёР№ РјРµС‚РѕРґ РґР»СЏ РіРµРЅРµСЂР°С†РёРё РїСЂРѕРјРїС‚Р° СѓС‡РµР±РЅРѕРіРѕ РїР»Р°РЅР°
         static std::string GenerateCurriculumPrompt(const std::string& language, const std::string& standard);
 
         // static std::string generateAnswerAnalysisPrompt(...);
     };
 } // tutor::core
+
 

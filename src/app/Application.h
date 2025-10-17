@@ -1,4 +1,4 @@
-
+﻿
 // src/app/Application.h
 
 #pragma once
@@ -24,3 +24,4 @@ namespace tutor::app {
         std::unique_ptr<ILLMService> llmService_;
     };
 } // tutor::app
+

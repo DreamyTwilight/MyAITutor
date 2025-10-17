@@ -1,4 +1,4 @@
-
+﻿
 // src/app/VirtualUserInterface.h
 
 #pragma once
@@ -9,12 +9,13 @@ namespace tutor::app {
     using tutor::interfaces::IUserInterface;
     using tutor::interfaces::Command;
 
-    // Заглушка, которая эмулирует ввод пользователя
+    // Р—Р°РіР»СѓС€РєР°, РєРѕС‚РѕСЂР°СЏ СЌРјСѓР»РёСЂСѓРµС‚ РІРІРѕРґ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
     class VirtualUserInterface : public IUserInterface {
     public:
-        Command getNextCommand() override;
+        Command GetNextCommand() override;
 
     private:
         bool first_call_ = true;
     };
 } // tutor::app
+

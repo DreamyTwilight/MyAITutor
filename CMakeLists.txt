@@ -8,6 +8,9 @@ project(my_project LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+#add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
 # Включаем сбор информации о файле/строке для всех уровней логирования
 # PUBLIC, чтобы действовало на все цели, которые линкуют spdlog
 # target_compile_definitions(my_ai_tutor PUBLIC SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)
@@ -28,6 +31,7 @@ set(AITUTOR_LIB_SOURCES
     src/infrastructure/SQLiteManager.cpp
     src/infrastructure/GeminiParser.cpp
     src/core/PromptRegistry.cpp
+    src/process/CurriculumGenerationProcess.cpp
 )
 
 # Определяем .h файлы, чтобы Visual Studio их видела
@@ -43,6 +47,9 @@ set(AITUTOR_HEADERS
     src/interfaces/IUserInterface.h
     src/core/DataModels.h
     src/core/PromptRegistry.h
+    src/process/CurriculumGenerationProcess.h
+    src/process/IAgent.h
+    src/process/IGenerativeProcess.h
 )
 
 # Определяем точку входа
